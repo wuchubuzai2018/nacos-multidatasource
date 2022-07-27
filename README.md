@@ -1,0 +1,2 @@
+# nacos-multidatasource
+提供微服务注册与配置中心Nacos的多数据源适配支持的仓库，支持MySQL、PostgreSQL、Oracle等
