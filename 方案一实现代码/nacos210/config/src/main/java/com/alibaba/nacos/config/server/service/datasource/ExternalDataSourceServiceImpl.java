@@ -20,6 +20,8 @@ import com.alibaba.nacos.common.utils.ConvertUtils;
 import com.alibaba.nacos.common.utils.InternetAddressUtil;
 import com.alibaba.nacos.common.utils.StringUtils;
 import com.alibaba.nacos.config.server.monitor.MetricsMonitor;
+import com.alibaba.nacos.multidatasource.dialect.DatabaseDialect;
+import com.alibaba.nacos.multidatasource.provider.DataSourceDialectProvider;
 import com.alibaba.nacos.config.server.utils.ConfigExecutor;
 import com.alibaba.nacos.config.server.utils.PropertyUtil;
 import com.alibaba.nacos.sys.env.EnvUtil;
@@ -75,7 +77,11 @@ public class ExternalDataSourceServiceImpl implements DataSourceService {
     private volatile List<Boolean> isHealthList;
     
     private volatile int masterIndex;
-    
+
+    private String dataSourceType;
+
+    private DatabaseDialect databaseDialect;
+
     @Override
     public void init() {
         queryTimeout = ConvertUtils.toInt(System.getProperty("QUERYTIMEOUT"), 3);
@@ -119,7 +125,8 @@ public class ExternalDataSourceServiceImpl implements DataSourceService {
     @Override
     public synchronized void reload() throws IOException {
         try {
-            dataSourceList = new ExternalDataSourceProperties()
+            final ExternalDataSourceProperties externalDataSourceProperties = new ExternalDataSourceProperties();
+            dataSourceList = externalDataSourceProperties
                     .build(EnvUtil.getEnvironment(), (dataSource) -> {
                         JdbcTemplate jdbcTemplate = new JdbcTemplate();
                         jdbcTemplate.setQueryTimeout(queryTimeout);
@@ -127,6 +134,11 @@ public class ExternalDataSourceServiceImpl implements DataSourceService {
                         testJtList.add(jdbcTemplate);
                         isHealthList.add(Boolean.TRUE);
                     });
+
+            this.dataSourceType = externalDataSourceProperties.getDstype();
+            //load databasedialect by type
+            this.databaseDialect = DataSourceDialectProvider.getDialect(this.dataSourceType);
+
             new SelectMasterTask().run();
             new CheckDbHealthTask().run();
         } catch (RuntimeException e) {
@@ -259,5 +271,15 @@ public class ExternalDataSourceServiceImpl implements DataSourceService {
                 }
             }
         }
+    }
+
+    @Override
+    public String getDataSourceType() {
+        return this.dataSourceType;
+    }
+
+    @Override
+    public DatabaseDialect databaseDialect() {
+        return this.databaseDialect;
     }
 }

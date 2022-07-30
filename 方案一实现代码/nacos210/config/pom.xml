@@ -73,7 +73,10 @@
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-encryption-plugin</artifactId>
         </dependency>
-        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>nacos-multidatasource</artifactId>
+        </dependency>
         <!-- for aop -->
         <dependency>
             <groupId>org.aspectj</groupId>

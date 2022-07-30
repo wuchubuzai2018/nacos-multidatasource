@@ -17,6 +17,7 @@
 package com.alibaba.nacos.config.server.utils;
 
 import com.alibaba.nacos.config.server.constant.PropertiesConstant;
+import com.alibaba.nacos.multidatasource.constant.DatabaseTypeConstant;
 import com.alibaba.nacos.sys.env.EnvUtil;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContextInitializer;
@@ -96,6 +97,11 @@ public class PropertyUtil implements ApplicationContextInitializer<ConfigurableA
      * Standalone mode uses DB.
      */
     private static boolean useExternalDB = false;
+
+    /**
+     * Current database platform.
+     */
+    private static String platform = "";
     
     /**
      * Inline storage value = ${nacos.standalone}.
@@ -237,6 +243,14 @@ public class PropertyUtil implements ApplicationContextInitializer<ConfigurableA
     public static boolean isEmbeddedStorage() {
         return embeddedStorage;
     }
+
+    public static void setPlatform(String platform) {
+        PropertyUtil.platform = platform;
+    }
+
+    public static String getPlatform() {
+        return platform;
+    }
     
     // Determines whether to read the data directly
     // if use mysql, Reduce database read pressure
@@ -280,8 +294,9 @@ public class PropertyUtil implements ApplicationContextInitializer<ConfigurableA
             setCorrectUsageDelay(getInt(PropertiesConstant.CORRECT_USAGE_DELAY, correctUsageDelay));
             setInitialExpansionPercent(getInt(PropertiesConstant.INITIAL_EXPANSION_PERCENT, initialExpansionPercent));
             // External data sources are used by default in cluster mode
-            setUseExternalDB(PropertiesConstant.MYSQL
-                    .equalsIgnoreCase(getString(PropertiesConstant.SPRING_DATASOURCE_PLATFORM, "")));
+            String platform = getString(PropertiesConstant.SPRING_DATASOURCE_PLATFORM, "");
+            setPlatform(platform);
+            setUseExternalDB(!DatabaseTypeConstant.DERBY.equalsIgnoreCase(platform));
             
             // must initialize after setUseExternalDB
             // This value is true in stand-alone mode and false in cluster mode

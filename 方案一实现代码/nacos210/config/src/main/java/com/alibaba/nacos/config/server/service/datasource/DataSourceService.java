@@ -18,6 +18,7 @@ package com.alibaba.nacos.config.server.service.datasource;
 
 import java.io.IOException;
 
+import com.alibaba.nacos.multidatasource.dialect.DatabaseDialect;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -76,5 +77,19 @@ public interface DataSourceService {
      * @return heath info.
      */
     String getHealth();
+
+    /**
+     * Get database datasource type.
+     *
+     * @return type name
+     */
+    public String getDataSourceType();
+
+    /**
+     * Get current db databasedialect config.
+     *
+     * @return database dialect
+     */
+    public DatabaseDialect databaseDialect();
     
 }

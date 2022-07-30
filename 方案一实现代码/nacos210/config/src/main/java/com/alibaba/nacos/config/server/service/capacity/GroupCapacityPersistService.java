@@ -16,11 +16,13 @@
 
 package com.alibaba.nacos.config.server.service.capacity;
 
+import com.alibaba.nacos.api.common.PrimaryKeyConstant;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.alibaba.nacos.config.server.model.capacity.Capacity;
 import com.alibaba.nacos.config.server.model.capacity.GroupCapacity;
 import com.alibaba.nacos.config.server.service.datasource.DataSourceService;
 import com.alibaba.nacos.config.server.service.datasource.DynamicDataSource;
+import com.alibaba.nacos.multidatasource.dialect.DatabaseDialect;
 import com.alibaba.nacos.config.server.utils.PropertyUtil;
 import com.alibaba.nacos.config.server.utils.TimeUtils;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
@@ -34,7 +36,6 @@ import javax.annotation.PostConstruct;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -56,10 +57,16 @@ public class GroupCapacityPersistService {
     private JdbcTemplate jdbcTemplate;
     
     private DataSourceService dataSourceService;
-    
+
+    private DatabaseDialect databaseDialect;
+
+    /**.
+     * init method
+     */
     @PostConstruct
     public void init() {
         this.dataSourceService = DynamicDataSource.getInstance().getDataSource();
+        this.databaseDialect = this.dataSourceService.databaseDialect();
         this.jdbcTemplate = dataSourceService.getJdbcTemplate();
     }
     
@@ -118,7 +125,7 @@ public class GroupCapacityPersistService {
         try {
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
             PreparedStatementCreator preparedStatementCreator = connection -> {
-                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = connection.prepareStatement(sql, PrimaryKeyConstant.RETURN_PRIMARY_KEYS);
                 String group = capacity.getGroup();
                 ps.setString(1, group);
                 ps.setInt(2, capacity.getQuota());
@@ -315,8 +322,7 @@ public class GroupCapacityPersistService {
      * @return GroupCapacity list.
      */
     public List<GroupCapacity> getCapacityList4CorrectUsage(long lastId, int pageSize) {
-        String sql = "SELECT id, group_id FROM group_capacity WHERE id>? LIMIT ?";
-        
+        String sql = databaseDialect.getLimitTopSql("SELECT id, group_id FROM group_capacity WHERE id>? ");
         if (PropertyUtil.isEmbeddedStorage()) {
             sql = "SELECT id, group_id FROM group_capacity WHERE id>? OFFSET 0 ROWS FETCH NEXT ? ROWS ONLY";
         }

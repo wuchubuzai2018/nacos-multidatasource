@@ -1,27 +1,57 @@
 # 方案一、多种数据库方言实现的注入判断适配
 ## 一、基本说明
 
-该种方案希望尽量不影响原有的SQL业务逻辑前提下进行实现。目前基于Nacos2.1版本，当前该种方案，在本地开发环境，已简单的适配核心的PersistService的处理，支持MySQL、Oracle、PostgreSQL。部分功能未测试，对于服务注册与配置等基础功能可以实现正常的维护操作。
+该种方案希望尽量不影响原有的SQL业务逻辑前提下进行实现。目前基于Nacos2.1版本，当前该种方案，在本地开发环境，单机环境启动方式已简单的适配核心的PersistService的处理，目前支持MySQL、Oracle、PostgreSQL。
 
-核心类图如下所示：
+部分功能未测试，对于服务注册与配置等基础功能可以实现正常的维护操作。
 
-![方案一](../images/plan1.png)
-
-最近代码梳理好后，会上传到仓库。
+目前准备测试集群的兼容情况和其他数据库的适配情况，欢迎大家一起来参与开发，项目核心类图在项目主页中。
 
 ## 二、开发情况
 
 当前方案基于Nacos2.1.0进行代码实现。
 
-实现对Nacos底层多种数据源的支持，默认为MySQL，且需要通过配置SPI的方式声明实现，根据时间安排进行匹配支持PostgreSQL、Oracle、DB2等数据库的支持，先不考虑插件化、动态化，优雅扩展性等。
+实现对Nacos底层多种数据源的支持，且需要通过配置SPI的方式声明实现，目前已测试单机环境启动支持PostgreSQL、Oracle数据库的支持，暂不考虑插件化、动态化，优雅扩展性等。
 
-目前该开发优先级先确保常见的CRUD操作可以正常访问支持。
+| 时间   | 状态                                  |
+| ------ | ------------------------------------- |
+| 202206 | 基本骨架流程定义与思考                |
+| 202207 | 单机环境适配PostgreSQL、Oracle、MySQL |
+| 202208 | 测试集群环境相关不兼容代码            |
 
+## 三、如何使用
 
+使用git克隆项目，然后再本地进行maven打包即可。
 
-## 三、目前发现的兼容性问题处理
+### 3.1、安装与打包命令
 
-### 3.1、通用兼容性解决与设计
+```
+mvn -Prelease-nacos -Dmaven.test.skip=true -Dpmd.skip=true -Dcheckstyle.skip=true -Drat.skip=true clean install -U  
+```
+
+### 3.2、安装包启动
+
+安装后启动即可，目前只在单机环境启动测试，所以启动时需要-m standalone模式进行启动，不想自己打包的，可以访问百度网盘，获取我之前已经打好的测试包，相关的数据库的脚本文件在如下位置：
+
+nacos210/distribution/conf/nacos-oracle.sql
+
+nacos210/distribution/conf/nacos-pg.sql
+
+nacos210/distribution/conf/nacos-mysql
+
+百度网盘打包地址：链接:https://pan.baidu.com/s/1MAyjwjY66_e0QtaYCiDYiA 提取码:v5rb 
+
+## 四、如何参与多数据源开发
+
+1、nacos210/multidatasource模块增加对应数据源的基本代码
+
+2、nacos210/config/src/main/java/com/alibaba/nacos/config/server/service/repository/dialect/目录继承相关方言的持久化实现。
+
+后续会把开发过程发出来。
+
+## 五、目前发现的兼容性问题处理
+
+### 5.1、通用兼容性解决与设计
 
 1、动态获取驱动配置及JDBC测试查询语句，核心逻辑在ExternalDataSourceProperties文件中，及调用数据库方言进行
 
@@ -35,7 +65,7 @@
 
 6、对数据库的分页的计算方式(pageNo - 1) * pageSize，封装为2个单独方法，便于不同的数据库进行分页参数控制
 
-### 3.2、PostgreSQL的兼容性问题：
+### 5.2、PostgreSQL的兼容性问题：
 
 已解决：
 
@@ -45,7 +75,7 @@
 
 1、针对dump业务的removeConfigHistory方法，进行重写，目前删除时，未加上分页控制，待实现如何处理
 
-### 3.3、Oracle的兼容性问题：
+### 5.3、Oracle的兼容性问题：
 
 已解决：
 

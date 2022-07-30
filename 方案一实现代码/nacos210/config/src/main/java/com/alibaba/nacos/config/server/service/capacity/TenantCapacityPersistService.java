@@ -16,10 +16,12 @@
 
 package com.alibaba.nacos.config.server.service.capacity;
 
+import com.alibaba.nacos.api.common.PrimaryKeyConstant;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.alibaba.nacos.config.server.model.capacity.TenantCapacity;
 import com.alibaba.nacos.config.server.service.datasource.DataSourceService;
 import com.alibaba.nacos.config.server.service.datasource.DynamicDataSource;
+import com.alibaba.nacos.multidatasource.dialect.DatabaseDialect;
 import com.alibaba.nacos.config.server.utils.PropertyUtil;
 import com.alibaba.nacos.config.server.utils.TimeUtils;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
@@ -33,7 +35,6 @@ import javax.annotation.PostConstruct;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -53,10 +54,16 @@ public class TenantCapacityPersistService {
     private JdbcTemplate jdbcTemplate;
     
     private DataSourceService dataSourceService;
-    
+
+    private DatabaseDialect databaseDialect;
+
+    /**.
+     * init method
+     */
     @PostConstruct
     public void init() {
         this.dataSourceService = DynamicDataSource.getInstance().getDataSource();
+        this.databaseDialect = this.dataSourceService.databaseDialect();
         this.jdbcTemplate = dataSourceService.getJdbcTemplate();
     }
     
@@ -100,7 +107,7 @@ public class TenantCapacityPersistService {
         try {
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
             PreparedStatementCreator preparedStatementCreator = connection -> {
-                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = connection.prepareStatement(sql, PrimaryKeyConstant.RETURN_PRIMARY_KEYS);
                 String tenant = tenantCapacity.getTenant();
                 ps.setString(1, tenant);
                 ps.setInt(2, tenantCapacity.getQuota());
@@ -266,8 +273,8 @@ public class TenantCapacityPersistService {
      * @return TenantCapacity List.
      */
     public List<TenantCapacity> getCapacityList4CorrectUsage(long lastId, int pageSize) {
-        String sql = "SELECT id, tenant_id FROM tenant_capacity WHERE id>? LIMIT ?";
-        
+        String sql = databaseDialect.getLimitTopSql("SELECT id, tenant_id FROM tenant_capacity WHERE id>? ");
+
         if (PropertyUtil.isEmbeddedStorage()) {
             sql = "SELECT id, tenant_id FROM tenant_capacity WHERE id>? OFFSET 0 ROWS FETCH NEXT ? ROWS ONLY";
         }

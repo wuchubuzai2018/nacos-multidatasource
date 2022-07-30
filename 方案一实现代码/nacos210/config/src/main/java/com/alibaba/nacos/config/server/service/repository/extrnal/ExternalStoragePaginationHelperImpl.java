@@ -17,6 +17,7 @@
 package com.alibaba.nacos.config.server.service.repository.extrnal;
 
 import com.alibaba.nacos.config.server.model.Page;
+import com.alibaba.nacos.multidatasource.dialect.DatabaseDialect;
 import com.alibaba.nacos.config.server.service.repository.PaginationHelper;
 import com.alibaba.nacos.config.server.service.sql.EmbeddedStorageContextUtils;
 import com.alibaba.nacos.config.server.utils.PropertyUtil;
@@ -32,14 +33,17 @@ import java.util.List;
  * @author <a href="mailto:liaochuntao@live.com">liaochuntao</a>
  */
 
-class ExternalStoragePaginationHelperImpl<E> implements PaginationHelper {
+public class ExternalStoragePaginationHelperImpl<E> implements PaginationHelper {
     
     private final JdbcTemplate jdbcTemplate;
-    
-    public ExternalStoragePaginationHelperImpl(JdbcTemplate jdbcTemplate) {
+
+    private final DatabaseDialect databaseDialect;
+
+    public ExternalStoragePaginationHelperImpl(JdbcTemplate jdbcTemplate, DatabaseDialect databaseDialect) {
         this.jdbcTemplate = jdbcTemplate;
+        this.databaseDialect = databaseDialect;
     }
-    
+
     /**
      * Take paging.
      *
@@ -91,9 +95,9 @@ class ExternalStoragePaginationHelperImpl<E> implements PaginationHelper {
         if (isDerby()) {
             selectSql = sqlFetchRows + " OFFSET " + startRow + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
         } else if (lastMaxId != null) {
-            selectSql = sqlFetchRows + " AND id > " + lastMaxId + " ORDER BY id ASC" + " LIMIT " + 0 + "," + pageSize;
+            selectSql = databaseDialect.getLimitPageSql(sqlFetchRows + " AND id > " + lastMaxId + " ORDER BY id ASC ", 0, pageSize);
         } else {
-            selectSql = sqlFetchRows + " LIMIT " + startRow + "," + pageSize;
+            selectSql = databaseDialect.getLimitPageSql(sqlFetchRows, pageNo, pageSize);
         }
         
         List<E> result = jdbcTemplate.query(selectSql, args, rowMapper);
@@ -218,7 +222,13 @@ class ExternalStoragePaginationHelperImpl<E> implements PaginationHelper {
             EmbeddedStorageContextUtils.cleanAllContext();
         }
     }
-    
+
+    /**
+     * update limit.
+     * @param sql orign sql
+     * @param args params
+     * @return int val
+     */
     public int updateLimitWithResponse(final String sql, final Object[] args) {
         String sqlUpdate = sql;
         

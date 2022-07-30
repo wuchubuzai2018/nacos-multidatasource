@@ -8,6 +8,7 @@ target
 .DS_Store
 .factorypath
 /logs
+data
 *.iml
 *.log
 node_modules

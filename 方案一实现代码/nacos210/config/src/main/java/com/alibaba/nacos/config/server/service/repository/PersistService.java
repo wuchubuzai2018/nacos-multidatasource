@@ -66,7 +66,7 @@ public interface PersistService {
     String SQL_DELETE_CONFIG_INFO_BY_IDS = "DELETE FROM config_info WHERE ";
     int QUERY_LIMIT_SIZE = 50;
     String PATTERN_STR = "*";
-    
+
     /**
      * create Pagination utils.
      *
