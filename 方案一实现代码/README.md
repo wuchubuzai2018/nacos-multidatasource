@@ -1,11 +1,9 @@
 # 方案一、多种数据库方言实现的注入判断适配
 ## 一、基本说明
 
-该种方案希望尽量不影响原有的SQL业务逻辑前提下进行实现。目前基于Nacos2.1版本，当前该种方案，在本地开发环境，单机环境启动方式已简单的适配核心的PersistService的处理，目前支持MySQL、Oracle、PostgreSQL。
+该种方案希望尽量不影响原有的SQL业务逻辑前提下进行实现。目前基于Nacos2.1版本，当前该种方案，在本地开发环境，单机环境和3节点集群环境启动方式已简单的适配核心的PersistService的处理，目前支持MySQL、Oracle、PostgreSQL。
 
-部分功能未测试，对于服务注册与配置等基础功能可以实现正常的维护操作。
-
-目前准备测试集群的兼容情况和其他数据库的适配情况，欢迎大家一起来参与开发，项目核心类图在项目主页中。
+对于服务注册与配置等基础功能可以实现正常的维护操作。
 
 ## 二、开发情况
 
@@ -23,23 +21,25 @@
 
 使用git克隆项目，然后再本地进行maven打包即可。
 
-### 3.1、安装与打包命令
+### 3.1、已打好测试包
+
+百度网盘打包地址：链接:https://pan.baidu.com/s/1MAyjwjY66_e0QtaYCiDYiA 提取码:v5rb 
+
+### 3.2、安装与打包命令
 
 ```
 mvn -Prelease-nacos -Dmaven.test.skip=true -Dpmd.skip=true -Dcheckstyle.skip=true -Drat.skip=true clean install -U  
 ```
 
-### 3.2、安装包启动
+### 3.3、安装包启动
 
-安装后启动即可，目前只在单机环境启动测试，所以启动时需要-m standalone模式进行启动，不想自己打包的，可以访问百度网盘，获取我之前已经打好的测试包，相关的数据库的脚本文件在如下位置：
+安装后启动即可，安装前根据实际情况，修改application.properties文件中的数据库地址，以及导入如下对应的数据库数据库脚本文件，目前Oracle脚本采用11g触发器的方式设置自增主键。
 
 nacos210/distribution/conf/nacos-oracle.sql
 
 nacos210/distribution/conf/nacos-pg.sql
 
 nacos210/distribution/conf/nacos-mysql
-
-百度网盘打包地址：链接:https://pan.baidu.com/s/1MAyjwjY66_e0QtaYCiDYiA 提取码:v5rb 
 
 ## 四、如何参与多数据源开发
 
