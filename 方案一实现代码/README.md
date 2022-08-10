@@ -17,21 +17,29 @@
 | 202207 | 单机环境适配PostgreSQL、Oracle、MySQL |
 | 202208 | 测试集群环境相关不兼容代码            |
 
-## 三、如何使用
+## 三、如何参与当前项目多数据源开发
+
+1、nacos210/multidatasource模块增加数据库驱动pom.xml依赖，对应数据源的基本代码，实现自定义Condition条件注解，实现自定义数据库方言实现。
+
+2、nacos210/config/src/main/java/com/alibaba/nacos/config/server/service/repository/dialect/目录继承相关方言的业务持久化类实现。
+
+3、目前项目支持MySQL\PostgreSQL\Oracle，在对接其他数据库时，可以先看看和那种比较像，继承已存在的代码，减少重复开发。
+
+## 四、如何使用
 
 使用git克隆项目，然后再本地进行maven打包即可。
 
-### 3.1、已打好测试包
+### 4.1、使用已打好测试包
 
 百度网盘打包地址：链接:https://pan.baidu.com/s/1MAyjwjY66_e0QtaYCiDYiA 提取码:v5rb 
 
-### 3.2、安装与打包命令
+### 4.2、下载源码自行编译安装与打包命令
 
 ```
 mvn -Prelease-nacos -Dmaven.test.skip=true -Dpmd.skip=true -Dcheckstyle.skip=true -Drat.skip=true clean install -U  
 ```
 
-### 3.3、安装包启动
+### 4.3、安装包启动
 
 安装后启动即可，安装前根据实际情况，修改application.properties文件中的数据库地址，以及导入如下对应的数据库数据库脚本文件，目前Oracle脚本采用11g触发器的方式设置自增主键。
 
@@ -40,14 +48,6 @@ nacos210/distribution/conf/nacos-oracle.sql
 nacos210/distribution/conf/nacos-pg.sql
 
 nacos210/distribution/conf/nacos-mysql
-
-## 四、如何参与多数据源开发
-
-1、nacos210/multidatasource模块增加对应数据源的基本代码
-
-2、nacos210/config/src/main/java/com/alibaba/nacos/config/server/service/repository/dialect/目录继承相关方言的持久化实现。
-
-后续会把开发过程发出来。
 
 ## 五、目前发现的兼容性问题处理
 
