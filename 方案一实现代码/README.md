@@ -31,7 +31,7 @@
 
 ### 4.1、使用已打好测试包
 
-百度网盘打包地址：链接:https://pan.baidu.com/s/1MAyjwjY66_e0QtaYCiDYiA 提取码:v5rb 
+百度网盘打包地址：链接: https://pan.baidu.com/s/1H0IiaxtW7rgDgJyWfVD14w 提取码: mcuk 
 
 ### 4.2、下载源码自行编译安装与打包命令
 
@@ -73,7 +73,7 @@ nacos210/distribution/conf/nacos-mysql
 
 未解决：
 
-1、针对dump业务的removeConfigHistory方法，进行重写，目前删除时，未加上分页控制，待实现如何处理
+1、针对dump业务的removeConfigHistory方法，进行重写，目前删除时，未加上分页控制，非分页删除，待实现如何处理
 
 ### 5.3、Oracle的兼容性问题：
 
