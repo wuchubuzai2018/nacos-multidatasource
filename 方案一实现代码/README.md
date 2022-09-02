@@ -1,7 +1,7 @@
 # 方案一、多种数据库方言实现的注入判断适配
 ## 一、基本说明
 
-该种方案希望尽量不影响原有的SQL业务逻辑前提下进行实现。目前基于Nacos2.1版本，当前该种方案，在本地开发环境，单机环境和3节点集群环境启动方式已简单的适配核心的PersistService的处理，目前支持MySQL、Oracle、PostgreSQL。
+该种方案希望尽量不影响原有的SQL业务逻辑前提下进行实现。目前基于Nacos2.1版本，当前该种方案，在本地开发环境，单机环境和3节点集群环境启动方式已简单的适配核心的PersistService的处理，目前支持MySQL、Oracle、PostgreSQL、达梦。
 
 对于服务注册与配置等基础功能可以实现正常的维护操作。
 
@@ -9,13 +9,15 @@
 
 当前方案基于Nacos2.1.0进行代码实现。
 
-实现对Nacos底层多种数据源的支持，且需要通过配置SPI的方式声明实现，目前已测试单机环境启动支持PostgreSQL、Oracle数据库的支持，暂不考虑插件化、动态化，优雅扩展性等。
+实现对Nacos底层多种数据源的支持，且需要通过配置SPI的方式声明实现，目前已测试单机环境启动支持PostgreSQL、Oracle
 
-| 时间   | 状态                                  |
-| ------ | ------------------------------------- |
-| 202206 | 基本骨架流程定义与思考                |
-| 202207 | 单机环境适配PostgreSQL、Oracle、MySQL |
-| 202208 | 测试集群环境相关不兼容代码            |
+、达梦数据库的支持，暂不考虑插件化、动态化，优雅扩展性等。
+
+| 时间   | 状态                                           |
+| ------ | ---------------------------------------------- |
+| 202206 | 基本骨架流程定义与思考                         |
+| 202207 | 单机环境适配PostgreSQL、Oracle、MySQL数据库    |
+| 202208 | 测试集群环境相关不兼容代码、增加适配达梦数据库 |
 
 ## 三、如何参与当前项目多数据源开发
 
@@ -23,7 +25,7 @@
 
 2、nacos210/config/src/main/java/com/alibaba/nacos/config/server/service/repository/dialect/目录继承相关方言的业务持久化类实现。
 
-3、目前项目支持MySQL\PostgreSQL\Oracle，在对接其他数据库时，可以先看看和那种比较像，继承已存在的代码，减少重复开发。
+3、目前项目支持MySQL\PostgreSQL\Oracle\达梦，在对接其他数据库时，可以先看看和那种比较像，继承已存在的代码，减少重复开发。
 
 ## 四、如何使用
 
@@ -47,7 +49,9 @@ nacos210/distribution/conf/nacos-oracle.sql
 
 nacos210/distribution/conf/nacos-pg.sql
 
-nacos210/distribution/conf/nacos-mysql
+nacos210/distribution/conf/nacos-mysql.sql
+
+nacos210/distribution/conf/nacos-dameng.sql
 
 ## 五、目前发现的兼容性问题处理
 
@@ -93,11 +97,19 @@ nacos210/distribution/conf/nacos-mysql
 
 1、用户表boolean类型问题，但是在Oracle上没有报错，存储的是1，可以用。
 
+### 5.4、达梦的兼容性问题：
 
+说明：
 
+当前采用继承Oracle方言的方式。
 
+已解决：
 
+1、由于达梦默认区分大小写，在某些类返回主键ID的时候，增加了默认方言方法
 
+未解决：
+
+未知
 
 
 

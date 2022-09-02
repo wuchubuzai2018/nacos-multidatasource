@@ -1,7 +1,9 @@
 # Nacos-MultiDataSource
 ## 一、项目介绍
 
-提供Spring Cloud Alibaba微服务注册与配置中心Nacos的多数据源适配支持的开源项目，目前计划支持MySQL、PostgreSQL、Oracle、达梦、人大金仓等。当前本地环境已基于Nacos2.1实现简单适配Oracle11g、PostgreSQL数据库。
+提供Spring Cloud Alibaba微服务注册与配置中心Nacos的多数据源适配支持的开源项目，目前计划支持MySQL、PostgreSQL、Oracle、达梦、人大金仓等。
+
+当前本地环境已基于Nacos2.1实现简单适配Oracle11g、PostgreSQL、达梦数据库。
 
 当前nacos底层数据库存储目前仅支持MySQL与Derby，然而很多企业内部用的是非MySQL数据库，且社区也有一些人基于Nacos1.4.2版本(Spring Data JPA)进行了Oracle和Postgresql适配，目前还未有一个实现多数据源适配的项目，于是根据自己开发BI系统的经验计划搞一搞。
 
@@ -11,7 +13,7 @@
 | ---------- | ---------- | -------------------- | --------- | ------------- |
 | Nacos2.1   | Oracle     | 本地环境简单测试通过 | 单机环境  | 3节点集群环境 |
 | Nacos2.1   | PostgreSQL | 本地环境简单测试通过 | 单机环境  | 3节点集群环境 |
-| Nacos2.1   | 达梦       | 待开始尝试           |           |               |
+| Nacos2.1   | 达梦       | 本地环境简单测试通过 | 单机环境  | 3节点集群环境 |
 | Nacos2.1   | 人大金仓   | 待开始尝试           |           |               |
 | Nacos2.1   | DB2        | 待开始尝试           |           |               |
 | Nacos1.4.3 | Oracle     | 待开始尝试           |           |               |
@@ -35,7 +37,7 @@
 
 ### 4.1、(当前采用)方案一、多种数据库方言实现的注入判断适配
 
-该种方案希望尽量不影响原有的SQL业务逻辑前提下进行实现。目前基于Nacos2.1版本，当前该种方案，在本地开发环境，已简单的适配核心的PersistService的处理，支持MySQL、Oracle、PostgreSQL。部分功能未测试，对于服务注册与配置等基础功能可以实现正常的维护操作。
+该种方案希望尽量不影响原有的SQL业务逻辑前提下进行实现。目前基于Nacos2.1版本，当前该种方案，在本地开发环境，已简单的适配核心的PersistService的处理，支持MySQL、Oracle、PostgreSQL、达梦。部分功能未测试，对于服务注册与配置等基础功能可以实现正常的维护操作。
 
 核心类图如下所示：
 
