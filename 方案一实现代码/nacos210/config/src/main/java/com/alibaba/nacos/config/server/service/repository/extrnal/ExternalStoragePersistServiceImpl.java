@@ -16,7 +16,6 @@
 
 package com.alibaba.nacos.config.server.service.repository.extrnal;
 
-import com.alibaba.nacos.api.common.PrimaryKeyConstant;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.common.utils.MD5Utils;
 import com.alibaba.nacos.common.utils.Pair;
@@ -436,7 +435,6 @@ public class ExternalStoragePersistServiceImpl implements PersistService {
         try {
             addConfigInfo(srcIp, srcUser, configInfo, time, configAdvanceInfo, notify);
         } catch (DataIntegrityViolationException ive) { // Unique constraint conflict
-            ive.printStackTrace();
             updateConfigInfo(configInfo, srcIp, srcUser, time, configAdvanceInfo, notify);
         }
     }
@@ -2104,10 +2102,11 @@ public class ExternalStoragePersistServiceImpl implements PersistService {
                         + "gmt_modified,c_desc,c_use,effect,type,c_schema,encrypted_data_key) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         
         try {
+            String[] returnPrimaryKeys = this.databaseDialect.getReturnPrimaryKeys();
             jt.update(new PreparedStatementCreator() {
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(sql, PrimaryKeyConstant.RETURN_PRIMARY_KEYS);
+                    PreparedStatement ps = connection.prepareStatement(sql, returnPrimaryKeys);
                     ps.setString(1, configInfo.getDataId());
                     ps.setString(2, configInfo.getGroup());
                     ps.setString(3, tenantTmp);

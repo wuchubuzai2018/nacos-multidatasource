@@ -52,7 +52,7 @@ public class ExternalDataSourceServiceImpl implements DataSourceService {
     /**
      * JDBC execute timeout value, unit:second.
      */
-    private int queryTimeout = 3;
+    private int queryTimeout = 10;
     
     private static final int TRANSACTION_QUERY_TIMEOUT = 5;
     
@@ -84,7 +84,7 @@ public class ExternalDataSourceServiceImpl implements DataSourceService {
 
     @Override
     public void init() {
-        queryTimeout = ConvertUtils.toInt(System.getProperty("QUERYTIMEOUT"), 3);
+        queryTimeout = ConvertUtils.toInt(System.getProperty("QUERYTIMEOUT"), 10);
         jt = new JdbcTemplate();
         // Set the maximum number of records to prevent memory expansion
         jt.setMaxRows(50000);
@@ -95,7 +95,7 @@ public class ExternalDataSourceServiceImpl implements DataSourceService {
         
         testMasterWritableJT = new JdbcTemplate();
         // Prevent the login interface from being too long because the main library is not available
-        testMasterWritableJT.setQueryTimeout(1);
+        testMasterWritableJT.setQueryTimeout(10);
         
         //  Database health check
         

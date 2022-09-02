@@ -17,21 +17,19 @@
 package com.alibaba.nacos.config.server.service.repository.dialect;
 
 import com.alibaba.nacos.config.server.configuration.ConditionOnExternalStorage;
-import com.alibaba.nacos.config.server.service.repository.PersistService;
-import com.alibaba.nacos.multidatasource.condition.ConditionOnExternalMysqlStorage;
+import com.alibaba.nacos.multidatasource.condition.ConditionOnExternalDamengStorage;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 /**
- * Mysql External Storage Persist Service.
+ * Dameng External Storage Persist Service.
  *
- * @author <a href="mailto:liaochuntao@live.com">liaochuntao</a>
- * @author klw
+ * @author Long Yu
  */
 @SuppressWarnings(value = {"PMD.MethodReturnWrapperTypeRule", "checkstyle:linelength"})
-@Conditional(value = {ConditionOnExternalStorage.class, ConditionOnExternalMysqlStorage.class})
+@Conditional(value = {ConditionOnExternalStorage.class, ConditionOnExternalDamengStorage.class})
 @Component
-public class MysqlExternalStoragePersistServiceImpl extends DefaultDialectExternalStoragePersistServiceImpl implements PersistService {
+public class DamengExternalStoragePersistServiceImpl extends OracleExternalStoragePersistServiceImpl {
 
 
 }

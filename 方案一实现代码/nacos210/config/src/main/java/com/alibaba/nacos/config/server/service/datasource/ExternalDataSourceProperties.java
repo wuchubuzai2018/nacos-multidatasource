@@ -109,7 +109,6 @@ public class ExternalDataSourceProperties {
             HikariDataSource ds = poolProperties.getDataSource();
             ds.setConnectionTestQuery(DataSourceDialectProvider.getDialect(dstype).getTestQuery());
             ds.setIdleTimeout(TimeUnit.MINUTES.toMillis(10L));
-            ds.setConnectionTimeout(TimeUnit.SECONDS.toMillis(3L));
             dataSources.add(ds);
             callback.accept(ds);
         }

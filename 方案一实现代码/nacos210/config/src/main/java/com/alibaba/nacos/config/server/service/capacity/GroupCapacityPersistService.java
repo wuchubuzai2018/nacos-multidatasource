@@ -16,7 +16,6 @@
 
 package com.alibaba.nacos.config.server.service.capacity;
 
-import com.alibaba.nacos.api.common.PrimaryKeyConstant;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.alibaba.nacos.config.server.model.capacity.Capacity;
 import com.alibaba.nacos.config.server.model.capacity.GroupCapacity;
@@ -124,8 +123,9 @@ public class GroupCapacityPersistService {
     private boolean insertGroupCapacity(final String sql, final GroupCapacity capacity) {
         try {
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+            String[] returnPrimaryKeys = this.databaseDialect.getReturnPrimaryKeys();
             PreparedStatementCreator preparedStatementCreator = connection -> {
-                PreparedStatement ps = connection.prepareStatement(sql, PrimaryKeyConstant.RETURN_PRIMARY_KEYS);
+                PreparedStatement ps = connection.prepareStatement(sql, returnPrimaryKeys);
                 String group = capacity.getGroup();
                 ps.setString(1, group);
                 ps.setInt(2, capacity.getQuota());

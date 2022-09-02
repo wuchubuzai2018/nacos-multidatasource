@@ -21,15 +21,17 @@ import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
- * Judge whether to user postgresql ExternalStorage by condition.
+ * Judge whether to user dameng ExternalStorage by condition.
  *
  * @author Long Yu
  */
-public class ConditionOnExternalPostgresqlStorage extends AbstractConditionOnExternalStorage {
+public class ConditionOnExternalDamengStorage extends ConditionOnExternalOracleStorage {
 
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-        return DatabaseTypeConstant.POSTGRESQL.equals(getPlatform(context));
+        String platform = getPlatform(context);
+        boolean equals = DatabaseTypeConstant.DAMENG.equals(platform);
+        return equals;
     }
 
 }

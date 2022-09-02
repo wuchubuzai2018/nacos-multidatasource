@@ -127,8 +127,14 @@ public class HistoryController {
             String tenant) throws AccessException {
         if (!Objects.equals(configHistoryInfo.getDataId(), dataId)
                 || !Objects.equals(configHistoryInfo.getGroup(), group)
-                || !Objects.equals(configHistoryInfo.getTenant(), tenant)) {
-            throw new AccessException("Please check dataId, group or tenant.");
+                || !Objects.equals(configHistoryInfo.getTenant(), tenant)
+              ) {
+            if (com.alibaba.nacos.api.common.Constants.DEFAULT_NAMESPACE_ID.equals(configHistoryInfo.getTenant()) &&
+                    "".equals(tenant)) {
+            } else {
+                throw new AccessException("Please check dataId, group or tenant.");
+            }
+
         }
     }
     

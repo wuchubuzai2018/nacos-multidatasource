@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2018 Alibaba Group Holding Ltd.
+ * Copyright 1999-2022 Alibaba Group Holding Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,14 @@ package com.alibaba.nacos.api.common;
 public class PrimaryKeyConstant {
 
     /**
-     * replace Statement.RETURN_GENERATED_KEYS into id key，
+     * replace lower Statement.RETURN_GENERATED_KEYS into id key.
      */
-    public static final String[] RETURN_PRIMARY_KEYS = new String[]{"id"};
+    public static final String[] LOWER_RETURN_PRIMARY_KEYS = new String[]{"id"};
+
+    /**
+     * upper replace Statement.RETURN_GENERATED_KEYS into id key.
+     * using dameng database.
+     */
+    public static final String[] UPPER_RETURN_PRIMARY_KEYS = new String[]{"ID"};
 
 }

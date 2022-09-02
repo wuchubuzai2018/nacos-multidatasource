@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2018 Alibaba Group Holding Ltd.
+ * Copyright 1999-2022 Alibaba Group Holding Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.alibaba.nacos.config.server.service.repository.dialect;
 
-import com.alibaba.nacos.api.common.PrimaryKeyConstant;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.common.utils.MD5Utils;
 import com.alibaba.nacos.common.utils.Pair;
@@ -93,10 +92,9 @@ import static com.alibaba.nacos.config.server.service.repository.RowMapperManage
 import static com.alibaba.nacos.config.server.service.repository.RowMapperManager.TENANT_INFO_ROW_MAPPER;
 
 /**
- * External Storage Persist Service.
+ * Default Dialect External Storage Persist Service.
  *
- * @author <a href="mailto:liaochuntao@live.com">liaochuntao</a>
- * @author klw
+ * @author Longyu
  */
 @SuppressWarnings(value = {"PMD.MethodReturnWrapperTypeRule", "checkstyle:linelength"})
 public class DefaultDialectExternalStoragePersistServiceImpl extends ExternalStoragePersistServiceImpl {
@@ -2100,10 +2098,11 @@ public class DefaultDialectExternalStoragePersistServiceImpl extends ExternalSto
                         + "gmt_modified,c_desc,c_use,effect,type,c_schema,encrypted_data_key) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try {
+            String[] returnPrimaryKeys = this.databaseDialect.getReturnPrimaryKeys();
             jt.update(new PreparedStatementCreator() {
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                    PreparedStatement ps = connection.prepareStatement(sql, PrimaryKeyConstant.RETURN_PRIMARY_KEYS);
+                    PreparedStatement ps = connection.prepareStatement(sql, returnPrimaryKeys);
                     ps.setString(1, configInfo.getDataId());
                     ps.setString(2, configInfo.getGroup());
                     ps.setString(3, tenantTmp);

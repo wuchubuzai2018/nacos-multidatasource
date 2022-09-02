@@ -143,6 +143,7 @@
         <mysql-connector-java.version>8.0.21</mysql-connector-java.version>
         <postgresql.jdbc.version>42.3.3</postgresql.jdbc.version>
         <oracle.jdbc.version>21.4.0.0.1</oracle.jdbc.version>
+        <dameng.jdbc.version>8.1.2.141</dameng.jdbc.version>
         <derby.version>10.14.2.0</derby.version>
         <cglib-nodep.version>2.1</cglib-nodep.version>
         <jcip-annotations.version>1.0</jcip-annotations.version>
@@ -860,19 +861,26 @@
                 <version>${mysql-connector-java.version}</version>
             </dependency>
 
-            <!-- -->
+            <!-- postgresql -->
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.jdbc.version}</version>
             </dependency>
 
+            <!-- oracle -->
             <dependency>
                 <groupId>com.oracle.database.jdbc</groupId>
                 <artifactId>ojdbc8</artifactId>
                 <version>${oracle.jdbc.version}</version>
             </dependency>
 
+            <!-- dameng -->
+            <dependency>
+                <groupId>com.dameng</groupId>
+                <artifactId>DmJdbcDriver18</artifactId>
+                <version>${dameng.jdbc.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.derby</groupId>

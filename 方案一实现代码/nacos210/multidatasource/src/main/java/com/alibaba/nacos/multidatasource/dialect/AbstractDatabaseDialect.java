@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2018 Alibaba Group Holding Ltd.
+ * Copyright 1999-2022 Alibaba Group Holding Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 
 package com.alibaba.nacos.multidatasource.dialect;
+
+import com.alibaba.nacos.api.common.PrimaryKeyConstant;
 
 /**
  * Abstract DatabaseDialect.
@@ -51,6 +53,11 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect {
     @Override
     public int getPageLastNum(int page, int pageSize) {
         return pageSize;
+    }
+
+    @Override
+    public String[] getReturnPrimaryKeys() {
+        return PrimaryKeyConstant.LOWER_RETURN_PRIMARY_KEYS;
     }
 
 }

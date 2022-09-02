@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2018 Alibaba Group Holding Ltd.
+ * Copyright 1999-2022 Alibaba Group Holding Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ public class DataSourceDialectProvider {
 
     private static final DataSourceDialectProvider INSTANCE = new DataSourceDialectProvider();
 
-
     private static final Map<String, DatabaseDialect> SUPPORT_DIALECT_MAP = new ConcurrentHashMap<String, DatabaseDialect>();
 
     private DataSourceDialectProvider() {
@@ -69,6 +68,5 @@ public class DataSourceDialectProvider {
     public static DataSourceDialectProvider instance() {
         return INSTANCE;
     }
-
 
 }

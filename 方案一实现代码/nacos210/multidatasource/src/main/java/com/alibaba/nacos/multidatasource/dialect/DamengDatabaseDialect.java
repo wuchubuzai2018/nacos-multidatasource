@@ -16,9 +16,22 @@
 
 package com.alibaba.nacos.multidatasource.dialect;
 
+import com.alibaba.nacos.api.common.PrimaryKeyConstant;
+
 /**
- * default database dialect.
+ * dameng database dialect.
  * @author Long Yu
  */
-public class DefaultDatabaseDialect extends MysqlDatabaseDialect {
+public class DamengDatabaseDialect extends OracleDatabaseDialect {
+
+    @Override
+    public String getType() {
+        return "dameng";
+    }
+
+    @Override
+    public String[] getReturnPrimaryKeys() {
+        return PrimaryKeyConstant.UPPER_RETURN_PRIMARY_KEYS;
+    }
+
 }

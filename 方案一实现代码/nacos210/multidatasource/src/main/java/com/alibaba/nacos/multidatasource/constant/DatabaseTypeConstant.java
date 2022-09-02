@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2018 Alibaba Group Holding Ltd.
+ * Copyright 1999-2022 Alibaba Group Holding Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,5 +32,7 @@ public class DatabaseTypeConstant {
     public static final String ORACLE = "oracle";
 
     public static final String DB2 = "db2";
+
+    public static final String DAMENG = "dameng";
 
 }

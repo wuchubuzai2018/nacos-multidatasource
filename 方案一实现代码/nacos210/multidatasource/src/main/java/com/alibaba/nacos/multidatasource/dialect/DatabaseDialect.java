@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2018 Alibaba Group Holding Ltd.
+ * Copyright 1999-2022 Alibaba Group Holding Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,5 +72,11 @@ public interface  DatabaseDialect {
      * @return contain page number param sql
      */
     public String getLimitPageSql(String sql, int pageNo, int pageSize);
+
+    /**
+     * get database return primary keys.
+     * @return
+     */
+    public String[] getReturnPrimaryKeys();
 
 }

@@ -16,7 +16,6 @@
 
 package com.alibaba.nacos.config.server.service.capacity;
 
-import com.alibaba.nacos.api.common.PrimaryKeyConstant;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.alibaba.nacos.config.server.model.capacity.TenantCapacity;
 import com.alibaba.nacos.config.server.service.datasource.DataSourceService;
@@ -106,8 +105,9 @@ public class TenantCapacityPersistService {
                         + "gmt_create, gmt_modified) SELECT ?, ?, count(*), ?, ?, ?, ?, ? FROM config_info WHERE tenant_id=?;";
         try {
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+            String[] returnPrimaryKeys = this.databaseDialect.getReturnPrimaryKeys();
             PreparedStatementCreator preparedStatementCreator = connection -> {
-                PreparedStatement ps = connection.prepareStatement(sql, PrimaryKeyConstant.RETURN_PRIMARY_KEYS);
+                PreparedStatement ps = connection.prepareStatement(sql, returnPrimaryKeys);
                 String tenant = tenantCapacity.getTenant();
                 ps.setString(1, tenant);
                 ps.setInt(2, tenantCapacity.getQuota());
