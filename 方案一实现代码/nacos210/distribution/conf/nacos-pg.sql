@@ -57,7 +57,7 @@ COMMENT ON TABLE "config_info" IS 'config_info';
 -- ----------------------------
 DROP TABLE IF EXISTS "config_info_aggr";
 CREATE TABLE "config_info_aggr" (
-  "id" int8 NOT NULL,
+  "id" bigserial NOT NULL,
   "data_id" varchar(255)  NOT NULL,
   "group_id" varchar(255)  NOT NULL,
   "datum_id" varchar(255)  NOT NULL,
@@ -173,7 +173,7 @@ CREATE TABLE "config_tags_relation" (
   "data_id" varchar(255)  NOT NULL,
   "group_id" varchar(128)  NOT NULL,
   "tenant_id" varchar(128) ,
-  "nid" int8 NOT NULL
+  "nid" bigserial NOT NULL
 )
 ;
 COMMENT ON COLUMN "config_tags_relation"."id" IS 'id';
