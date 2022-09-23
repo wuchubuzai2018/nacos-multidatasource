@@ -294,9 +294,9 @@ public class PropertyUtil implements ApplicationContextInitializer<ConfigurableA
             setCorrectUsageDelay(getInt(PropertiesConstant.CORRECT_USAGE_DELAY, correctUsageDelay));
             setInitialExpansionPercent(getInt(PropertiesConstant.INITIAL_EXPANSION_PERCENT, initialExpansionPercent));
             // External data sources are used by default in cluster mode
-            String platform = getString(PropertiesConstant.SPRING_DATASOURCE_PLATFORM, "");
-            setPlatform(platform);
-            setUseExternalDB(!DatabaseTypeConstant.DERBY.equalsIgnoreCase(platform));
+            String configPlatform = getString(PropertiesConstant.SPRING_DATASOURCE_PLATFORM, "");
+            setPlatform(configPlatform);
+            setUseExternalDB(!"".equalsIgnoreCase(configPlatform) || !DatabaseTypeConstant.DERBY.equalsIgnoreCase(configPlatform));
             
             // must initialize after setUseExternalDB
             // This value is true in stand-alone mode and false in cluster mode
