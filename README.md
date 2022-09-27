@@ -7,7 +7,13 @@
 
 截止目前最新版本，nacos底层数据库存储目前仅支持MySQL与Derby，然而很多企业内部用的是非MySQL数据库，且社区也有一些人基于Nacos1.4.2版本(Spring Data JPA)进行了Oracle和Postgresql适配，目前还未有一个实现多数据源适配的项目，于是根据自己开发BI系统的经验计划搞一搞。
 
-## 二、当前适配计划列表
+## 二、参与开源贡献记录
+
+学习阿里巴巴的Nacos对于Java开发者来说是很有意义的，目前社区的活跃度也是比较高，目前个人为Nacos提交过3个Pull Request。
+
+当前自己的Nacos贡献记录：https://github.com/alibaba/nacos/commits?author=wuchubuzai2018
+
+## 三、当前适配计划列表
 
 | 适配版本   | 适配数据库 | 进展                 | 测试范围1 | 测试范围2     |
 | ---------- | ---------- | -------------------- | --------- | ------------- |
@@ -21,7 +27,7 @@
 | Nacos1.4.3 | 达梦       | 待开始尝试           |           |               |
 | Nacos1.4.3 | 人大金仓   | 待开始尝试           |           |               |
 
-## 三、项目文件夹结构
+如在当前使用个人的这个版本中，出现了问题，请及时提交ISSUE，一起共建，一起成长。
 
 方案一开发文档说明(文档中提供测试包)：[Nacos支持适配多种数据库方言实现说明](https://github.com/wuchubuzai2018/nacos-multidatasource/tree/main/%E6%96%B9%E6%A1%88%E4%B8%80%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81)
 
