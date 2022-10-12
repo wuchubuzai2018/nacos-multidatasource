@@ -3,6 +3,8 @@
 
 提供Spring Cloud Alibaba微服务注册与配置中心Nacos的多数据源适配支持的开源项目，目前计划支持MySQL、PostgreSQL、Oracle、达梦、人大金仓等。
 
+项目页面访问数量统计：![Visitor Count](https://profile-counter.glitch.me/wuchubuzai2018/count.svg)
+
 当前本地环境已基于Nacos2.1实现简单适配Oracle11g、PostgreSQL、达梦数据库。
 
 截止目前最新版本，nacos底层数据库存储目前仅支持MySQL与Derby，然而很多企业内部用的是非MySQL数据库，且社区也有一些人基于Nacos1.4.2版本(Spring Data JPA)进行了Oracle和Postgresql适配，目前还未有一个实现多数据源适配的项目，于是根据自己开发BI系统的经验计划搞一搞。
