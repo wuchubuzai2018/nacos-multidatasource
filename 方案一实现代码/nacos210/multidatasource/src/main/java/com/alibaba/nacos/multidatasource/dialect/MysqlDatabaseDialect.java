@@ -17,7 +17,7 @@
 package com.alibaba.nacos.multidatasource.dialect;
 
 /**
- * MySQL database dialect.
+ * MySQL and Mariadb database dialect.
  * @author Long Yu
  */
 public class MysqlDatabaseDialect extends  AbstractDatabaseDialect {
@@ -25,6 +25,16 @@ public class MysqlDatabaseDialect extends  AbstractDatabaseDialect {
     @Override
     public String getType() {
         return "mysql";
+    }
+    
+    @Override
+    public String getLimitPageSql(String sql) {
+        return sql + "  LIMIT ?,?";
+    }
+    
+    @Override
+    public String getLimitPageSql(String sql, int pageNo, int pageSize) {
+        return sql + " LIMIT " + getPagePrevNum(pageNo, pageSize) + "," + pageSize;
     }
 
 }
