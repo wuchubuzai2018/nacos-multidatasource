@@ -296,7 +296,7 @@ public class PropertyUtil implements ApplicationContextInitializer<ConfigurableA
             // External data sources are used by default in cluster mode
             String configPlatform = getString(PropertiesConstant.SPRING_DATASOURCE_PLATFORM, "");
             setPlatform(configPlatform);
-            setUseExternalDB(!"".equalsIgnoreCase(configPlatform) || !DatabaseTypeConstant.DERBY.equalsIgnoreCase(configPlatform));
+            setUseExternalDB(!"".equalsIgnoreCase(configPlatform) && !DatabaseTypeConstant.DERBY.equalsIgnoreCase(configPlatform));
             
             // must initialize after setUseExternalDB
             // This value is true in stand-alone mode and false in cluster mode

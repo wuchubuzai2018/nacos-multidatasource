@@ -43,18 +43,19 @@ public class PostgresqlExternalStoragePersistServiceImpl extends DefaultDialectE
     @Override
     public void removeConfigHistory(final Timestamp startTime, final int limitSize) {
         //to do develop limit contro
-        String sql = "DELETE FROM his_config_info WHERE gmt_modified < ? ";
+        String sql = "WITH temp_table as (SELECT id FROM his_config_info WHERE gmt_modified < ? LIMIT ? ) " +
+                "DELETE FROM his_config_info WHERE id in (SELECT id FROM~ temp_table) ";
         ExternalStoragePaginationHelperImpl<ConfigInfo> paginationHelper = (ExternalStoragePaginationHelperImpl<ConfigInfo>) createPaginationHelper();
         int count;
         try {
-            count = paginationHelper.updateLimitWithResponse(sql, new Object[] {startTime});
+            count = paginationHelper.updateLimitWithResponse(sql, new Object[] {startTime, limitSize});
             while (count > 0) {
                 try {
                     TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException e) {
                     LogUtil.FATAL_LOG.error("[interrupt-error] " + e, e);
                 }
-                count = paginationHelper.updateLimitWithResponse(sql, new Object[] {startTime});
+                count = paginationHelper.updateLimitWithResponse(sql, new Object[] {startTime, limitSize});
             }
         } catch (CannotGetJdbcConnectionException e) {
             LogUtil.FATAL_LOG.error("[db-error] " + e, e);
