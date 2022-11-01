@@ -44,7 +44,7 @@ public class PostgresqlExternalStoragePersistServiceImpl extends DefaultDialectE
     public void removeConfigHistory(final Timestamp startTime, final int limitSize) {
         //to do develop limit contro
         String sql = "WITH temp_table as (SELECT id FROM his_config_info WHERE gmt_modified < ? LIMIT ? ) " +
-                "DELETE FROM his_config_info WHERE id in (SELECT id FROM~ temp_table) ";
+                "DELETE FROM his_config_info WHERE id in (SELECT id FROM temp_table) ";
         ExternalStoragePaginationHelperImpl<ConfigInfo> paginationHelper = (ExternalStoragePaginationHelperImpl<ConfigInfo>) createPaginationHelper();
         int count;
         try {
